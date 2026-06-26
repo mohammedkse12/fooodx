@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إنشاء حساب تاجر | FOODX</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/merchant_style.css">
+</head>
+
+<body>
+
+    <div class="signup-container">
+        <div class="logo-container">
+            <img src="imges/logo.jpg" alt="logo">
+            <h2>انشاء حساب تاجر</h2>
+            <p>انضم إلينا كتاجر للمواد الغذائية في منصة Food X</p>
+        </div>
+
+        <form action="#" method="POST" enctype="multipart/form-data">
+
+            <div class="form-section">
+                <h3 class="section-title">البيانات الأساسية</h3>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>اسم المستخدم<span class="required">*</span></label>
+                        <input type="text" name="username" placeholder="مثال: ahmed_store" required>
+                        <span class="hint">يُستخدم لتسجيل الدخول لاحقاً</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label>كلمة المرور<span class="required">*</span></label>
+                        <div style="position: relative;">
+                            <input type="password" id="passwordField" name="password" placeholder="أدخل كلمة مرور قوية"
+                                required>
+                            <button type="button" id="togglePassword"
+                                style="position: absolute; left: 10px; top: 12px; background: rgb(238, 240, 238);padding: 5px; border: 1px solid #007e5e;border-radius: 10px; cursor: pointer; font-size: 12px;">
+                                اظهار
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>البريد الإلكتروني<span class="required">*</span></label>
+                    <input type="email" name="email" placeholder="example@domain.com" required>
+                    <span class="hint">سنقوم بإرسال رمز التحقق (OTP) إلى هذا البريد</span>
+                </div>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>اسم المحل التجاري<span class="required">*</span></label>
+                        <input type="text" name="store_name" placeholder="الاسم الذي سيظهر للعملاء" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>رقم الهاتف<span class="required">*</span></label>
+                        <input type="tel" name="phone" placeholder="01XXXXXXXX" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>الموقع / المدينة<span class="required">*</span></label>
+                    <select name="location" id="locationSelect" required>
+                        <option value="" disabled selected>-- حدد موقع المصنع --</option>
+                        <option value="khartoum">الخرطوم</option>
+                        <option value="omdurman">أم درمان</option>
+                        <option value="bahri">الخرطوم بحري</option>
+                        <option value="wad_madani">ود مدني</option>
+                        <option value="port_sudan">بورتسودان</option>
+                        <option value="other">مدينة أخرى...</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="otherCityGroup" style="display: none;">
+                    <label>اسم المدينة الأخرى<span class="required">*</span></label>
+                    <input type="text" id="otherCityInput" name="other_location" placeholder="اكتب اسم المدينة هنا">
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3 class="section-title">التوثيق والبيانات القانونية</h3>
+
+                <div class="form-group">
+                    <label>الرقم الوطني<span class="required">*</span></label>
+                    <input type="text" name="national_id" placeholder="أدخل الرقم الوطني المكون من 11 رقم" pattern="\d+"
+                        required>
+                </div>
+
+                <div class="form-group">
+                    <label>رخصة المحل / الرخصة التجارية (اختياري)</label>
+                    <input type="file" name="trade_license" accept="image/*, .pdf">
+                    <span class="hint">يدعم صيغ الصور و PDF لتسهيل انضمام صغار التجار</span>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">إنشاء الحساب</button>
+        </form>
+    </div>
+
+
+    <script src="merchant.js"></script>
+
+</body>
+
+</html>

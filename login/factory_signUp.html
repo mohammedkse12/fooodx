@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إنشاء حساب مورد | FOODX</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/factory_style.css">
+</head>
+
+<body>
+
+    <div class="signup-container">
+        <div class="logo-container">
+            <img src="imges/logo.jpg" alt="logo">
+            <h2>انشاء حساب مورد</h2>
+            <p>انضم إلينا كمزود رئيسي للمواد الغذائية في منصة Food X</p>
+        </div>
+
+        <form action="#" method="POST">
+
+            <input type="hidden" name="account_status" value="pending_review">
+
+            <div class="form-section">
+                <h3 class="section-title">بيانات الدخول</h3>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>اسم المستخدم<span class="required">*</span></label>
+                        <input type="text" name="username" placeholder="مثال: factory_123" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>كلمة المرور<span class="required">*</span></label>
+                        <div class="password-wrapper">
+                            <input type="password" id="passwordField" name="password" placeholder="أدخل كلمة مرور قوية"
+                                required>
+                            <button type="button" id="togglePassword"
+                                style="position: absolute; left: 10px; top: 12px; background: rgb(238, 240, 238);padding: 5px; border: 1px solid #007e5e;border-radius: 10px; cursor: pointer; font-size: 12px;">
+                                اظهار
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3 class="section-title">البيانات التعريفية والتواصل</h3>
+
+                <div class="form-group">
+                    <label>اسم المصنع<span class="required">*</span></label>
+                    <input type="text" name="factory_name" placeholder="الاسم التجاري الذي سيظهر للتجار على المنصة"
+                        required>
+                </div>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>البريد الإلكتروني<span class="required">*</span></label>
+                        <input type="email" name="email" placeholder="example@factory.com" required>
+                        <span class="hint">أساسي لاستلام رمز التحقق (OTP)</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label>رقم الهاتف<span class="required">*</span></label>
+                        <input type="tel" name="phone" placeholder="01XXXXXXXX" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>الموقع / المدينة<span class="required">*</span></label>
+                <select name="location" id="locationSelect" required>
+                    <option value="" disabled selected>-- حدد موقع المصنع --</option>
+                    <option value="khartoum">الخرطوم</option>
+                    <option value="omdurman">أم درمان</option>
+                    <option value="bahri">الخرطوم بحري</option>
+                    <option value="wad_madani">ود مدني</option>
+                    <option value="port_sudan">بورتسودان</option>
+                    <option value="other">مدينة أخرى...</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="otherCityGroup" style="display: none;">
+                <label>اسم المدينة الأخرى<span class="required">*</span></label>
+                <input type="text" id="otherCityInput" name="other_location" placeholder="اكتب اسم المدينة هنا">
+            </div>
+            <div class="form-section">
+                <h3 class="section-title">الإثبات الرقمي</h3>
+
+                <div class="form-group">
+                    <label>رقم السجل التجاري<span class="required">*</span></label>
+                    <input type="text" name="commercial_register" placeholder="أدخل رقم السجل (مثال: 12345)" required>
+                    <span class="hint">سيتم مراجعته وتفعيل الحساب لاحقاً من قِبل الإدارة.</span>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">إرسال طلب التسجيل</button>
+        </form>
+    </div>
+
+    <script src="factory.js"></script>
+</body>
+
+</html>
