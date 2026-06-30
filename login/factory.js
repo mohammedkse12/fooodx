@@ -13,29 +13,11 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // 2. ميزة الخيارات الأخرى (إظهار حقل المدينة عند اختيار "مدينة أخرى")
-    const locationSelect = document.getElementById('locationSelect');
-    const otherCityGroup = document.getElementById('otherCityGroup');
-    const otherCityInput = document.getElementById('otherCityInput');
-
-    if (locationSelect && otherCityGroup && otherCityInput) {
-        locationSelect.addEventListener('change', function () {
-            if (this.value === 'other') {
-                otherCityGroup.style.display = 'block'; // إظهار الحقل
-                otherCityInput.setAttribute('required', 'required'); // جعله إجبارياً
-            } else {
-                otherCityGroup.style.display = 'none'; // إخفاء الحقل
-                otherCityInput.removeAttribute('required'); // إلغاء الإجبارية
-                otherCityInput.value = ''; // تفريغ النص
-            }
-        });
-    }
-
     // 3. التنبيه عند إرسال النموذج ومنع إعادة التحميل السريعة
     const form = document.querySelector('form');
     if (form) {
         form.addEventListener('submit', function (event) {
-            // الكود السحري: يمنع المتصفح من إعادة تحميل الصفحة فوراً لنتمكن من رؤية الـ Alert
+            //  : يمنع المتصفح من إعادة تحميل الصفحة فوراً لنتمكن من رؤية الـ Alert
             event.preventDefault();
 
             alert('تم استلام بياناتك بنجاح! حسابك الآن "قيد المراجعة" وسيتم تفعيله قريباً بواسطة الإدارة.');

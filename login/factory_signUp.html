@@ -62,28 +62,35 @@
 
                     <div class="form-group">
                         <label>رقم الهاتف<span class="required">*</span></label>
-                        <input type="tel" name="phone" placeholder="01XXXXXXXX" required>
+                        <input type="tel" name="phone" placeholder="0XXXXXXXX" required>
                     </div>
                 </div>
             </div>
 
-            <div class="form-group">
-                <label>الموقع / المدينة<span class="required">*</span></label>
-                <select name="location" id="locationSelect" required>
-                    <option value="" disabled selected>-- حدد موقع المصنع --</option>
-                    <option value="khartoum">الخرطوم</option>
-                    <option value="omdurman">أم درمان</option>
-                    <option value="bahri">الخرطوم بحري</option>
-                    <option value="wad_madani">ود مدني</option>
-                    <option value="port_sudan">بورتسودان</option>
-                    <option value="other">مدينة أخرى...</option>
-                </select>
+            <div class="form-group" id="city">
+                <label>الموقع بالتفصيل<span class="required">*</span></label>
+                <input type="text" id="cityInput" name="location" placeholder="مثال: بحري، المنطقة الصناعية" required>
             </div>
 
-            <div class="form-group" id="otherCityGroup" style="display: none;">
-                <label>اسم المدينة الأخرى<span class="required">*</span></label>
-                <input type="text" id="otherCityInput" name="other_location" placeholder="اكتب اسم المدينة هنا">
+            <div class="form-group">
+                <label>هل تتوفر لديكم وسيلة شحن / توصيل للطلبات؟<span class="required">*</span></label>
+
+                <div class="radio-container">
+                    <label class="radio-option">
+                        <input type="radio" name="shipping_available" value="yes" required checked>
+                        <span class="custom-radio"></span>
+                        <span class="radio-text">نعم</span>
+                    </label>
+
+                    <label class="radio-option">
+                        <input type="radio" name="shipping_available" value="no" required>
+                        <span class="custom-radio"></span>
+                        <span class="radio-text">لا</span>
+                    </label>
+                </div>
             </div>
+
+
             <div class="form-section">
                 <h3 class="section-title">الإثبات الرقمي</h3>
 

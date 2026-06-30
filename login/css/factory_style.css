@@ -121,6 +121,74 @@ body {
     gap: 15px;
 }
 
+
+/* حاوية خيارات الشحن */
+.radio-container {
+    display: flex;
+    gap: 20px;
+    margin-top: 8px;
+    background-color: #fff;
+    padding: 12px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+}
+
+.radio-option {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+    user-select: none;
+}
+
+.radio-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+/* الدائرة الخارجية المخصصة */
+.custom-radio {
+    height: 18px;
+    width: 18px;
+    background-color: #fff;
+    border: 2px solid var(--border-color);
+    border-radius: 50%;
+    margin-left: 8px;
+    /* مسافة بين الدائرة والنص لـ RTL */
+    display: inline-block;
+    transition: all 0.2s ease;
+}
+
+/* النص المصاحب للخيارات */
+.radio-text {
+    font-size: 14px;
+    color: var(--text-color);
+    font-weight: 400 !important;
+}
+
+.radio-option:hover .custom-radio {
+    border-color: var(--primary-color);
+}
+
+/* التنسيق عند اختيار الحقل */
+.radio-option input:checked~.custom-radio {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    box-shadow: inset 0 0 0 3px #fff;
+}
+
+@media (max-width: 480px) {
+    .radio-container {
+        flex-direction: column;
+        gap: 12px;
+    }
+}
+
+
+
 /* زر الإرسال */
 .submit-btn {
     width: 100%;
