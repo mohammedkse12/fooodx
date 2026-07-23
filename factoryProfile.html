@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الملف الشخصي</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        /* لتشكيل الانحناء الأصفر المميز في المنتصف */
+        .header-bg {
+            background-color: #f8c827;
+            border-bottom-left-radius: 40px;
+            border-bottom-right-radius: 40px;
+            position: relative;
+        }
+
+        .center-curve {
+            position: absolute;
+            bottom: -60px;
+            /* زيادة العمق قليلاً لتوفير مساحة مريحة للصورة */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 260px;
+            height: 140px;
+            background-color: #f8c827;
+            border-bottom-left-radius: 130px;
+            border-bottom-right-radius: 130px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 25px -5px rgba(243, 179, 56, 0.3);
+        }
+    </style>
+</head>
+
+<body class="p-4 bg-gray-50 text-gray-800">
+
+    <div class="max-w-6xl mx-auto bg-white rounded-[40px] shadow-2xl overflow-hidden min-h-[600px] pb-12 ">
+
+        <!-- الجزء العلوي الأصفر (الـ Header) -->
+        <div class="header-bg pt-4 px-8 pb-16 text-white relative">
+
+            <!-- شريط التنقل العلوي الأبيض -->
+            <div
+                class="bg-white rounded-full px-6 py-3 flex items-center justify-between text-gray-500 text-sm font-medium shadow-sm">
+                <!-- اللوجو -->
+                <div class="text-[#8c6d31] font-bold tracking-widest text-lg font-serif">
+                    • FOODX •
+                </div>
+                <!-- الروابط -->
+                <div class="flex items-center gap-6">
+                    <a href="factoryProfile.html"
+                        class="text-black font-semibold border-b-2 border-[#f3b338] pb-1">الملف الشخصي</a>
+                    <a href="orders.html" class="hover:text-black transition">الطلبات</a>
+                    <a href="productManagement.html" class="hover:text-black transition">ادارة المنتجات</a>
+                    <a href="report.html" class="hover:text-black transition">التقارير</a>
+                </div>
+                <!-- مساحة فارغة للتوازن -->
+                <div class="w-16"></div>
+            </div>
+
+            <!-- معلومات الاستجابة السريعة والتقييم الإجمالي -->
+            <div class="mt-8 flex justify-between items-center px-4">
+                <!-- سرعة الرد -->
+                <div class="flex items-center gap-2">
+                    <div class="w-2.5 h-2.5 bg-emerald-400 rounded-full animate-pulse"></div>
+                    <p class="text-white/90 text-sm font-medium">يرد عادةً خلال 15 دقيقة</p>
+                </div>
+
+                <!-- التقييم العام -->
+                <div class="flex items-center gap-2" dir="ltr">
+                    <div class="bg-white/20 px-3 py-1.5 rounded-full flex items-center gap-1.5">
+                        <i class="fa-solid fa-star"></i>
+                        <span class="text-sm font-bold text-white">4.8</span>
+                        <span class="text-white/60 text-xs">(1,200 تاجر)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- الدائرة المنحنية في المنتصف (تحتوي الآن على صورة البروفايل) -->
+            <div class="center-curve">
+                <!-- صورة البروفايل الدائرية مع إطار أبيض أنيق -->
+                <div class="relative group cursor-pointer mb-1">
+                    <img src="https://th.bing.com/th/id/OIP.S3RMvI-FQNNX_Gs68_zDYQHaHa?w=134&h=180&c=7&r=0&o=7&pid=1.7&rm=3"
+                        alt="DAL FOOD"
+                        class="w-30 h-30 rounded-full object-cover border-4 border-white shadow-md transition group-hover:scale-105">
+
+                    <!-- أيقونة صغيرة اختيارية للإشارة إلى إمكانية تعديل الصورة عند الحوم فوقها -->
+                    <div
+                        class="absolute bottom-0 right-0 bg-white text-gray-700 p-1 rounded-full shadow border border-gray-100 opacity-0 group-hover:opacity-100 transition duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
+                            <path
+                                d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                        </svg>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+        <!-- الاسم والمعلومات أسفل المنحنى مباشرة ليتوسط الشاشة -->
+        <div class="text-center mt-18">
+            <h1 id="factoryName-display" class="text-2xl font-bold text-gray-800 tracking-wide"></h1>
+            <p class="text-gray-400 text-lg font-semibold uppercase tracking-widest mt-1">أكبر وأشمل شركة أغذية في
+                السودان</p>
+        </div>
+
+
+        <!-- بطاقات بناء الثقة (مؤشرات الأداء للتاجر) -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 px-8 mt-10" dir="rtl">
+
+            <!-- 1. بطاقة الاعتماد والالتزام (مكان الفيزا سابقاً) -->
+            <div
+                class="bg-[#007e5e] rounded-[30px] p-6 text-white h-44 flex flex-col justify-between shadow-xs relative overflow-hidden">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-[10px] bg-white/20 text-white px-2.5 py-1 rounded-full font-medium">
+                            الشحن</span>
+                    </div>
+                    <i class="fa-solid fa-truck-moving text-2xl"></i>
+                </div>
+
+                <div class="my-2">
+                    <span id="shipping_rate" class="text-3xl font-bold tracking-tight">%</span>
+
+                </div>
+
+                <div class="text-xs text-white/90">
+                    <p class="font-semibold">معدل الالتزام بالتوصيل في الوقت المحدد</p>
+                    <p class="text-[10px] text-white/70 mt-0.5">بناءً على آخر 500 طلب جملة</p>
+                </div>
+            </div>
+
+            <!-- 2. بطاقة حجم العمل والنشاط الحالي (المنطقة الوسطى) -->
+            <div
+                class="bg-gray-50 border border-gray-300 rounded-[30px] p-6 h-44 flex flex-col justify-between relative overflow-hidden">
+                <div>
+                    <span class="text-[10px] bg-green-100 text-700 px-2.5 py-1 rounded-full font-bold">
+                        الطلبات</span>
+                    <h4 id="active_orders" class="text-3xl font-bold text-gray-800 mt-4"></h4>
+                    <p class="text-xs text-gray-400 mt-1">طلب نشط يجري تجهيزها وشحنها للتجار الآن</p>
+                </div>
+                <!-- منحنى نمو مبسط أسفل البطاقة لمحاكاة التصميم الأصلي -->
+                <div class="w-full h-10 bg-[#007e5e] rounded-t-full self-end absolute bottom-0 left-0 right-0"></div>
+            </div>
+
+            <!-- 3. بطاقة حجم التسليم الكلي (الجهة اليسرى) -->
+            <div class="bg-[#007e5e]  rounded-[30px] p-6 h-44 flex flex-col justify-between shadow-xs">
+                <div class="flex justify-between items-center">
+                    <span class="text-[10px] bg-white/20 text-white px-2.5 py-1 rounded-full font-bold">
+                        معدل الانجاز</span>
+                    <i class="fa-solid fa-box-open text-white text-lg"></i>
+                </div>
+
+                <div class="my-1">
+                    <h5 id="total_delivered" class="text-2xl font-bold text-white"></h5>
+                    <p class="text-xs text-white font-medium mt-1">وحدة تم تسليمها بنجاح (كرتونة / شوال)</p>
+                </div>
+
+                <div class="pt-2 border-t border-gray-100 flex items-center justify-between text-[11px]">
+                    <span class="text-gray-300">أقل قيمة طلب (MOQ):</span>
+                    <span class="font-bold text-gray-300">$500</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- قسم عرض منتجات المصنع التموينية -->
+        <div class="px-8 mt-12">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-bold text-gray-700">المنتجات المتاحة للطلب الفوري للجملة:</h3>
+                <span class="text-xs text-gray-400">إجمالي الأصناف: 4</span>
+            </div>
+
+            <!-- شبكة المنتجات المستوحاة من المتاجر الاحترافية -->
+            <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- جافا سكريبت تملأ هذا المكان -->
+            </div>
+        </div>
+
+    </div>
+
+    <!-- كود الجافا سكريبت الديناميكي -->
+    <script>
+        const factoryName = "دال الغذائية";
+        document.getElementById("factoryName-display").textContent = factoryName;
+
+        const shipping_rate = "97.1%";
+        document.getElementById("shipping_rate").textContent = shipping_rate;
+
+        const active_orders = "45";
+        document.getElementById("active_orders").textContent = active_orders;
+
+        const total_delivered = "150.000";
+        document.getElementById("total_delivered").textContent = total_delivered;
+        const products = [
+            {
+                id: 1,
+                name: "مكرونة نوبو-كوع",
+                category: "الحبوب والنشويات",
+                price: 12.50,
+                stock: 20,
+                image: "imges/nobo.jpg"
+            },
+            {
+                id: 2,
+                name: "دقيق سيقا الخباز (شوال)",
+                category: "الدقيق",
+                price: 18.20,
+                stock: 1,
+                image: "imges/sayga.jpg"
+            },
+            {
+                id: 3,
+                name: "دقيق زادنا للكسرة و العصيدة",
+                category: "الدقيق",
+                price: 35.00,
+                stock: 20,
+                image: "imges/zadna.jpg"
+            },
+            {
+                id: 4,
+                name: "لبن كابو المجفف",
+                category: "المعلبات والألبان",
+                price: 45.00,
+                stock: 24,
+                image: "imges/milk.jpeg"
+            }
+        ];
+
+
+
+        function displayProducts() {
+            const grid = document.getElementById("products-grid");
+            grid.innerHTML = "";
+
+            products.forEach(product => {
+
+                const cardHTML = `
+                    <div class="group bg-white border border-gray-150 rounded-[25px] overflow-hidden shadow-xs hover:shadow-md transition duration-300 flex flex-col h-full">
+                        <div class="h-44 w-full bg-gray-50 relative overflow-hidden">
+                            <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover transition duration-500 group-hover:scale-105">
+                            <span class="absolute top-3 right-3 text-[10px] bg-white/90 backdrop-blur-xs text-gray-600 px-2.5 py-1 rounded-full font-bold shadow-sm">
+                                ${product.category}
+                            </span>
+                        </div>
+                        <div class="p-5 flex-1 flex flex-col justify-between">
+                            <div>
+                                <h4 class="text-base font-bold text-gray-800 line-clamp-1 group-hover:text-[#f3b338] transition duration-200">${product.name}</h4>
+                                <p class="text-sm font-semibold text-gray-500 mt-1.5">سعر الجملة: $${product.price.toFixed(2)}</p>
+                            </div>
+                            <div class="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm font-bold text-gray-700">${product.stock} وحدة بالجملة</p>
+                                </div>
+                            
+                            </div>
+                        </div>
+                    </div>
+                `;
+                grid.innerHTML += cardHTML;
+            });
+        }
+
+        displayProducts();
+
+
+        /**
+                // دالة لجلب معلومات بروفايل المصنع من الـ Backend
+        function loadFactoryProfile() {
+            //  استبدال هذا الرابط برابط السيرفر الحقيقي لاحقاً
+            const apiURL = "https://api.yourplatform.com/factory/profile/1"; 
+        
+            fetch(apiURL)
+                .then(response => response.json())
+                .then(data => {
+                    // هنا نقوم بتوزيع البيانات الحقيقية القادمة من السيرفر على التصميم
+                    document.getElementById("factory-name").innerText = data.name;
+                    document.getElementById("shipping-rate").innerText = data.shippingRate + "%";
+                    document.getElementById("active-orders").innerText = data.activeOrders + " طلب نشط";
+                    document.getElementById("total-delivered").innerText = data.totalDelivered;
+                    
+                    // هنا نمرر مصفوفة المنتجات الحقيقية للدالة التي صممناها سابقاً لعرضها
+                    displayProducts(data.products); 
+                })
+                .catch(error => console.error("حدث خطأ أثناء جلب البيانات:", error));
+        }
+                **/
+    </script>
+</body>
+
+</html>

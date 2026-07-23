@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة المنتجات</title>
+    <!-- تضمين Tailwind CSS للتنسيق السريع -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .header-bg {
+            background-color: #f8c827;
+            border-bottom-left-radius: 40px;
+            border-bottom-right-radius: 40px;
+            position: relative;
+        }
+    </style>
+</head>
+
+<body class="p-4 bg-gray-50 text-gray-800">
+
+    <div class="max-w-6xl mx-auto bg-white rounded-[40px] shadow-2xl overflow-hidden min-h-[600px] pb-12 relative">
+
+        <!-- الجزء العلوي الأصفر (الـ Header) -->
+        <div class="header-bg pt-4 px-8 pb-12 text-white">
+            <!-- شريط التنقل -->
+            <div
+                class="bg-white rounded-full px-6 py-3 flex items-center justify-between text-gray-500 text-sm font-medium shadow-sm">
+                <!-- اللوجو -->
+                <div class="text-[#8c6d31] font-bold tracking-widest text-lg font-serif">
+                    • FOODX •
+                </div>
+                <!-- الروابط -->
+                <div class="flex items-center gap-6">
+                    <a href="factoryProfile.html" class="hover:text-black transition">الملف الشخصي</a>
+                    <a href="orders.html" class="hover:text-black transition">الطلبات</a>
+                    <a href="productManagement.html"
+                        class="text-black font-semibold border-b-2 border-[#f3b338] pb-1">ادارة المنتجات</a>
+                    <a href="report.html" class="hover:text-black transition">التقارير</a>
+                </div>
+                <!-- مساحة فارغة للتوازن -->
+                <div class="w-16"></div>
+            </div>
+
+            <div class="mt-6 flex justify-between items-center px-4">
+                <div>
+                    <h2 class="text-xl font-bold">مخزن المواد التموينية</h2>
+                    <p class="text-white/80 text-xs mt-1">يمكنك إضافة منتجات جديدة، تعديل الأسعار، أو حذف الأصناف.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- متحكمات الأدوات (زر إضافة منتج جديد) -->
+        <div class="px-8 mt-8 flex justify-between items-center">
+            <h3 class="text-lg font-bold text-gray-700">قائمة الأصناف الحالية</h3>
+
+            <!-- زر الـ (+) لإضافة منتج -->
+            <button onclick="openModal('add')"
+                class="bg-[#f3b338] text-white px-5 py-2.5 rounded-full text-sm font-bold shadow-md hover:bg-[#dca02e] transition flex items-center gap-2 cursor-pointer">
+                <span class="text-lg leading-none">+</span> إضافة منتج جديد
+            </button>
+        </div>
+
+        <!-- شبكة عرض المنتجات الديناميكية -->
+        <div class="px-8 mt-6">
+            <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- جافا سكريبت ستقوم بالبناء هنا -->
+            </div>
+        </div>
+
+        <!-- النافذة المنبثقة التفاعلية (Modal) لإضافة وتعديل المنتجات -->
+        <div id="product-modal"
+            class="hidden fixed inset-0 bg-black/50 backdrop-blur-xs flex items-center justify-center z-50 p-4">
+            <div
+                class="bg-white rounded-[30px] w-full max-w-md p-6 shadow-2xl relative animate-in fade-in zoom-in-95 duration-200">
+                <h3 id="modal-title" class="text-lg font-bold text-gray-800 mb-4">إضافة منتج جديد</h3>
+
+                <!-- حقول المدخلات -->
+                <input type="hidden" id="edit-product-id">
+                <div class="space-y-4">
+                    <div>
+                        <label class="text-xs font-bold text-gray-400 block mb-1">اسم المنتج التمويني</label>
+                        <input type="text" id="input-name"
+                            class="w-full border border-gray-200 rounded-xl px-4 py-2 text-sm outline-none focus:border-[#f3b338]">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-gray-400 block mb-1">التصنيف</label>
+                        <select id="input-category"
+                            class="w-full border border-gray-200 rounded-xl px-4 py-2 text-sm outline-none focus:border-[#f3b338]">
+                            <option value="الحبوب و النشويات">الحبوب و النشويات</option>
+                            <option value="الدقيق">الدقيق</option>
+                            <option value="السكريات">السكريات</option>
+                            <option value="المعلبات والألبان">المعلبات والألبان</option>
+                        </select>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="text-xs font-bold text-gray-400 block mb-1">سعر الجملة ($)</label>
+                            <input type="number" step="0.01" id="input-price"
+                                class="w-full border border-gray-200 rounded-xl px-4 py-2 text-sm outline-none focus:border-[#f3b338]">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-gray-400 block mb-1">عدد الوحدات بالجملة</label>
+                            <input type="number" id="input-stock"
+                                class="w-full border border-gray-200 rounded-xl px-4 py-2 text-sm outline-none focus:border-[#f3b338]">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-gray-400 block mb-1">رابط صورة المنتج (يمكن تركها
+                            افتراضية)</label>
+                        <input type="text" id="input-image"
+                            class="w-full border border-gray-200 rounded-xl px-4 py-2 text-sm outline-none focus:border-[#f3b338]"
+                            placeholder="https://...">
+                    </div>
+                </div>
+
+                <!-- أزرار التحكم بالنافذة -->
+                <div class="flex gap-2 mt-6 justify-end">
+                    <button onclick="closeModal()"
+                        class="bg-gray-100 text-gray-500 px-4 py-2 rounded-xl text-xs font-bold hover:bg-gray-200 transition cursor-pointer">إلغاء</button>
+                    <button onclick="saveProduct()"
+                        class="bg-[#f3b338] text-white px-5 py-2 rounded-xl text-xs font-bold hover:bg-[#dca02e] transition cursor-pointer">حفظ
+                        البيانات</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- كود الجافا سكريبت للتحكم الكامل (CRUD Operations) -->
+    <script>
+
+        // مصفوفة المنتجات الأساسية
+        let products = [
+
+            { id: 1, name: "مكرونة نوبو-كوع", category: "الحبوب والنشويات", price: 12.50, stock: 20, image: "imges/nobo.jpg" },
+            { id: 2, name: "دقيق سيقا الخباز (شوال)", category: "الدقيق", price: 18.20, stock: 1, image: "imges/sayga.jpg" },
+            { id: 3, name: "دقيق زادنا للكسرة و العصيدة", category: "الدقيق", price: 35.00, stock: 20, image: "imges/zadna.jpg" },
+            { id: 4, name: "لبن كابو المجفف", category: "المعلبات والألبان", price: 45.00, stock: 24, image: "imges/milk.jpeg" }
+        ];
+
+        // دالة لعرض المنتجات في الشبكة
+        function displayProducts() {
+            const grid = document.getElementById("products-grid");
+            grid.innerHTML = "";
+
+            if (products.length === 0) {
+                grid.className = "block text-center py-12 text-gray-400 col-span-4";
+                grid.innerHTML = "<p class='font-semibold'>المخزن فارغ تماماً، يرجى إضافة منتجات جديدة.</p>";
+                return;
+            } else {
+                grid.className = "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6";
+            }
+
+            products.forEach(product => {
+
+                const cardHTML = `
+                    <div class="bg-white border border-gray-150 rounded-[25px] overflow-hidden shadow-xs hover:shadow-sm transition flex flex-col h-full">
+                        <div class="h-36 w-full bg-gray-50 relative">
+                            <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover">
+                            <span class="absolute top-2 right-2 text-[10px] bg-white/90 text-gray-600 px-2.5 py-1 rounded-full font-bold">${product.category}</span>
+                        </div>
+                        <div class="p-4 flex-1 flex flex-col justify-between">
+                            <div>
+                                <h4 class="text-sm font-bold text-gray-800 line-clamp-1">${product.name}</h4>
+                                <div class="flex justify-between items-center mt-2">
+                                    <span class="text-xs text-gray-500 font-semibold">$${product.price.toFixed(2)}</span>
+                                    <span class="text-[10px] px-2 py-0.5 rounded-full"> (${product.stock} وحدة بالجملة)</span>
+                                </div>
+                            </div>
+                            
+                            <!-- أزرار الإدارة (تعديل وحذف واضحة جداً) -->
+                            <div class="mt-4 pt-3 border-t border-gray-100 flex gap-2">
+                                <button onclick="openModal('edit', ${product.id})" class="flex-1 bg-gray-50 hover:bg-gray-100 text-gray-600 text-xs py-1.5 rounded-lg border border-gray-200 transition font-medium cursor-pointer flex items-center justify-center gap-1"><i class="fa-solid fa-pen ml-3"></i>
+                                    تعديل
+                                </button>
+                                <button onclick="deleteProduct(${product.id})" class="bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs px-2.5 py-1.5 rounded-lg border border-rose-100 transition cursor-pointer" title="حذف المنتج">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                grid.innerHTML += cardHTML;
+            });
+        }
+
+        // دالة لفتح النافذة المنبثقة وتجهيز بياناتها
+        function openModal(mode, id = null) {
+            const modal = document.getElementById("product-modal");
+            modal.classList.remove("hidden");
+
+            if (mode === 'add') {
+                document.getElementById("modal-title").innerText = "إضافة منتج تمويني جديد";
+                document.getElementById("edit-product-id").value = "";
+                document.getElementById("input-name").value = "";
+                document.getElementById("input-price").value = "";
+                document.getElementById("input-stock").value = "";
+                document.getElementById("input-image").value = "https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=400";
+            } else if (mode === 'edit') {
+                document.getElementById("modal-title").innerText = "تعديل بيانات المنتج";
+                const product = products.find(p => p.id === id);
+                document.getElementById("edit-product-id").value = product.id;
+                document.getElementById("input-name").value = product.name;
+                document.getElementById("input-category").value = product.category;
+                document.getElementById("input-price").value = product.price;
+                document.getElementById("input-stock").value = product.stock;
+                document.getElementById("input-image").value = product.image;
+            }
+        }
+
+        // دالة لإغلاق النافذة المنبثقة
+        function closeModal() {
+            document.getElementById("product-modal").classList.add("hidden");
+        }
+
+        // دالة حفظ البيانات (سواء كانت إضافة أو تعديل)
+        function saveProduct() {
+            const id = document.getElementById("edit-product-id").value;
+            const name = document.getElementById("input-name").value;
+            const category = document.getElementById("input-category").value;
+            const price = parseFloat(document.getElementById("input-price").value);
+            const stock = parseInt(document.getElementById("input-stock").value);
+            const image = document.getElementById("input-image").value;
+
+            if (!name || isNaN(price) || isNaN(stock)) {
+                alert("يرجى ملء جميع الحقول الأساسية بشكل صحيح.");
+                return;
+            }
+
+            if (id === "") {
+                // عملية إضافة منتج جديد
+                const newProduct = { id: Date.now(), name, category, price, stock, image };
+                products.push(newProduct);
+            } else {
+                // عملية تعديل منتج حالي
+                const product = products.find(p => p.id == id);
+                product.name = name;
+                product.category = category;
+                product.price = price;
+                product.stock = stock;
+                product.image = image;
+            }
+
+            closeModal();
+            displayProducts();
+        }
+
+        // دالة الحذف الصريحة والآمنة
+        function deleteProduct(id) {
+            const product = products.find(p => p.id === id);
+            // نافذة تأكيد للتأكد من رغبة المورد بالحذف الفعلي
+            if (confirm(`هل أنت متأكد تماماً من حذف "${product.name}" نهائياً من المخزن؟`)) {
+                products = products.filter(p => p.id !== id);
+                displayProducts();
+            }
+        }
+
+        // تشغيل البناء الأولي للمخزن
+        displayProducts();
+    </script>
+</body>
+
+</html>

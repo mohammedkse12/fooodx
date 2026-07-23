@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الطلبات الواردة</title>
+    <!-- تضمين Tailwind CSS للتنسيق السريع -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .header-bg {
+            background-color: #f8c827;
+            border-bottom-left-radius: 40px;
+            border-bottom-right-radius: 40px;
+            position: relative;
+        }
+    </style>
+</head>
+
+<body class="p-4 bg-gray-50 text-gray-800">
+
+    <div class="max-w-6xl mx-auto bg-white rounded-[40px] shadow-2xl overflow-hidden min-h-[600px] pb-12">
+
+        <!-- الجزء العلوي الأصفر (الـ Header الثابت للهوية) -->
+        <div class="header-bg pt-4 px-8 pb-12 text-white">
+            <!-- شريط التنقل -->
+            <div
+                class="bg-white rounded-full px-6 py-3 flex items-center justify-between text-gray-500 text-sm font-medium shadow-sm">
+                <!-- اللوجو -->
+                <div class="text-[#8c6d31] font-bold tracking-widest text-lg font-serif">
+                    • FOODX •
+                </div>
+                <!-- الروابط -->
+                <div class="flex items-center gap-6">
+                    <a href="factoryProfile.html" class="hover:text-black transition">الملف الشخصي</a>
+                    <a href="orders.html" class="text-black font-semibold border-b-2 border-[#f3b338] pb-1">الطلبات</a>
+                    <a href="productManagement.html" class="hover:text-black transition">ادارة المنتجات</a>
+                    <a href="report.html" class="hover:text-black transition">التقارير</a>
+                    <!-- <a href="#" class="hover:text-black transition">Settings</a> -->
+                </div>
+                <!-- مساحة فارغة للتوازن -->
+                <div class="w-16"></div>
+            </div>
+
+            <div class="mt-6 flex justify-between items-center px-4">
+                <div>
+                    <h2 class="text-xl font-bold">إدارة الطلبات الواردة</h2>
+                    <p class="text-white/80 text-xs mt-1">يرجى مراجعة الكميات المتوفرة قبل الموافقة على طلبات الجملة.
+                    </p>
+                </div>
+                <!-- عداد الطلبات المعلقة -->
+                <div class="bg-white/20 px-4 py-2 rounded-2xl text-center">
+                    <p class="text-[15px] uppercase text-white/90">طلبات بانتظار القرار</p>
+                    <p id="pending-counter" class="text-xl font-bold">0</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- قسم عرض الطلبات الواردة -->
+        <div class="px-8 mt-8">
+            <div id="orders-container" class="space-y-4">
+                <!-- جافا سكريبت ستقوم ببناء بطاقات الطلبات هنا -->
+            </div>
+        </div>
+
+    </div>
+
+    <!-- كود الجافا سكريبت الديناميكي للتحكم بالطلبات -->
+    <script>
+        // 1. مصفوفة الطلبات الواردة الوهمية (Mock Orders Data)
+        let incomingOrders = [
+            {
+                orderId: "ID-9941",
+                merchantName: "سوبرماركت البركة المركزي",
+                merchantRating: "4.9",
+                date: "اليوم، 02:30 م",
+                items: [
+                    { name: "دقيق سيقا الخباز", quantity: "50 شوال" },
+                    { name: "مكرونة نوبو-كوع", quantity: "20 كرتونة" }
+                ],
+                totalAmount: 989.00,
+            },
+            {
+                orderId: "ID-9942",
+                merchantName: "مؤسسة الرائد لتجارة التجزئة",
+                merchantRating: "4.5",
+                date: "اليوم، 11:15 ص",
+                items: [
+                    { name: "لبن كابو مجفف", quantity: "40 كرتونة" }
+                ],
+                totalAmount: 3500.00,
+            },
+            {
+                orderId: "ID-9943",
+                merchantName: "مؤسسة العنقاء للتجارة",
+                merchantRating: "4.9",
+                date: "اليوم، 11:15 ص",
+                items: [
+                    { name: "دقيق زادنا للعصيدة و الكسرة", quantity: "40 باكت" }
+                ],
+                totalAmount: 3500.00,
+            }
+        ];
+
+        // 2. دالة لعرض الطلبات وتحديث العداد
+        function displayOrders() {
+            const container = document.getElementById("orders-container");
+            const counter = document.getElementById("pending-counter");
+
+            counter.innerText = incomingOrders.length;
+            container.innerHTML = ""; // تنظيف الصندوق
+
+            // حالة عدم وجود طلبات
+            if (incomingOrders.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-12 text-gray-400">
+                        <span class="text-4xl block mb-2"></span>
+                        <p class="text-sm font-semibold">تمت معالجة جميع الطلبات الواردة بنجاح!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // الدوران لبناء بطاقات الطلبات
+            incomingOrders.forEach((order, index) => {
+                // تجميع المنتجات داخل نص منسق
+                const itemsSummary = order.items.map(item => `${item.name} (${item.quantity})`).join(' ، ');
+
+                const orderCardHTML = `
+                    <div id="card-${order.orderId}" class="bg-white border border-gray-150 rounded-[25px] p-6 shadow-xs hover:shadow-sm transition flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+                        
+                        <!-- معلومات التاجر والطلب الأساسية -->
+                        <div class="flex-1">
+                            <div class="flex items-center gap-3">
+                                <span class="text-xs font-bold text-black bg-amber-50 px-2.5 py-1 rounded-full">${order.orderId}</span>
+                                <h4 class="text-base font-bold text-gray-800">${order.merchantName}</h4>
+                                <span class="fa-solid fa-star text-[#f8c827] text-lg text-xs font-bold"> ${order.merchantRating}</span>
+                            </div>
+                            
+                            <!-- تفاصيل المنتجات المطلوبة -->
+                            <p class="text-sm text-gray-650 mt-3 font-medium">
+                                <span class="text-gray-400 font-normal">المنتجات:</span> ${itemsSummary}
+                            </p>
+                            
+                            <!-- معلومات الوقت  -->
+                            <div class="flex gap-4 mt-2 text-[11px] text-gray-400">
+                                <span>التوقيت: ${order.date}</span>
+                            </div>
+                        </div>
+
+                        <!-- الماليات والقرارات التفاعلية -->
+                        <div class="flex items-center justify-between lg:justify-end gap-6 border-t lg:border-t-0 pt-4 lg:pt-0 border-gray-100">
+                            <!-- المبلغ الإجمالي -->
+                            <div class="lg:text-left">
+                                <p class="text-[10px] text-gray-450 uppercase">المبلغ الإجمالي</p>
+                                <p class="text-xl font-bold text-gray-800">$${order.totalAmount.toFixed(2)}</p>
+                            </div>
+                            
+                            <!-- أزرار التحكم والقرار -->
+                            <div class="flex gap-2">
+                                <!-- زر الرفض -->
+                                <button onclick="handleOrderAction('${order.orderId}', 'reject')" 
+                                        class="bg-rose-50 text-rose-600 border border-rose-100 px-4 py-2 rounded-xl text-xs font-bold hover:bg-rose-100 transition cursor-pointer">
+                                    رفض
+                                </button>
+                                <!-- زر القبول -->
+                                <button onclick="handleOrderAction('${order.orderId}', 'accept')" 
+                                        class="bg-[#007e5e] text-white px-5 py-2 rounded-xl text-xs font-bold shadow-xs hover:bg-[#dca02e] transition cursor-pointer">
+                                    موافقة وتجهيز
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                `;
+                container.innerHTML += orderCardHTML;
+            });
+        }
+
+        // 3. دالة معالجة الأزرار (تفاعل فوري وحذف التجهيز)
+        function handleOrderAction(orderId, action) {
+            if (action === 'accept') {
+                alert(` تم قبول الطلب ${orderId} بنجاح، وتحويله لقسم التجهيز والشحن.`);
+            } else {
+                alert(` تم رفض الطلب ${orderId}. سيتم إشعار التاجر فوراً.`);
+            }
+
+            // حذف الطلب من المصفوفة لمحاكاة التحديث الفوري للباكيند
+            incomingOrders = incomingOrders.filter(order => order.orderId !== orderId);
+            displayProducts(); // هذه تسمية خاطئة سهواً، سنستدعي الدالة الصحيحة بالأسفل
+            displayOrders();
+        }
+
+        // تشغيل الصفحة
+        displayOrders();
+    </script>
+</body>
+
+</html>

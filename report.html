@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>التقارير</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .bg-brand-green {
+            background-color: #007e5e;
+        }
+
+        .bg-brand-yellow {
+            background-color: #f8c827;
+        }
+
+        .text-brand-green {
+            color: #007e5e;
+        }
+
+        .text-brand-yellow {
+            color: #f8c827;
+        }
+
+        .border-brand-yellow {
+            border-color: #f8c827;
+        }
+
+        .header-bg {
+            background-color: #f8c827;
+            border-bottom-left-radius: 40px;
+            border-bottom-right-radius: 40px;
+            position: relative;
+        }
+    </style>
+</head>
+
+<body class="p-4 bg-gray-50 text-gray-800">
+
+    <div class="max-w-6xl mx-auto bg-white rounded-[40px] shadow-2xl overflow-hidden min-h-[600px] pb-12">
+
+        <!-- الهيدر باللون الزمردي الأساسي #007e5e -->
+        <div class="header-bg pt-4 px-8 pb-10 text-white mb-10">
+            <!-- شريط التنقل -->
+            <div
+                class="bg-white rounded-full px-6 py-3 flex items-center justify-between text-gray-500 text-sm font-medium shadow-sm">
+                <!-- اللوجو -->
+                <div class="text-[#8c6d31] font-bold tracking-widest text-lg font-serif">
+                    • FOODX •
+                </div>
+                <!-- الروابط -->
+                <div class="flex items-center gap-6">
+                    <a href="factoryProfile.html" class="hover:text-black transition">الملف الشخصي</a>
+                    <a href="orders.html" class="hover:text-black transition">الطلبات</a>
+                    <a href="productManagement.html" class="hover:text-black transition">ادارة المنتجات</a>
+                    <a href="#" class="text-black font-semibold border-b-2 border-[#f3b338] pb-1">التقارير</a>
+                </div>
+                <!-- مساحة فارغة للتوازن -->
+                <div class="w-16"></div>
+            </div>
+
+            <div class="mt-6 flex justify-between items-center px-4">
+                <div>
+                    <h2 class="text-xl font-bold">تقارير الأداء والمبيعات</h2>
+                    <p class="text-white/80 text-xs mt-1">نظرة عامة على الإيرادات، حركة المخزون، وسلوك التجار الشركاء.
+                    </p>
+                </div>
+                <div
+                    class="bg-white/10 backdrop-blur-xs px-4 py-2 rounded-2xl flex items-center gap-2 border border-white/20">
+                    <span class="text-brand-yellow text-xs font-bold">الفترة:</span>
+                    <select class="bg-transparent text-white text-xs font-semibold outline-none cursor-pointer">
+                        <option class="text-gray-800" value="month">هذا الشهر (يوليو)</option>
+                        <option class="text-gray-800" value="quarter">الربع الحالي</option>
+                        <option class="text-gray-800" value="year">السنة الحالية (2026)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- 1. مؤشرات الأداء الرئيسية (KPI Cards) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 px-8 -mt-6 ">
+
+            <div class="bg-white border border-gray-100 rounded-[22px] p-5 shadow-sm flex flex-col justify-between">
+                <div class="flex justify-between items-center">
+                    <span class="text-xs text-gray-400 font-medium">إجمالي المبيعات</span>
+                    <span class="fa-solid fa-sack-dollar p-2 rounded-xl bg-amber-50 text-brand-yellow text-lg"></span>
+                </div>
+                <div class="mt-3">
+                    <h3 class="text-2xl font-bold text-gray-800">$124,500</h3>
+                    <p class="text-[11px] text-emerald-600 font-bold mt-1">↑ +14.2% مقارنة بالشهر الماضي</p>
+                </div>
+            </div>
+
+            <div class="bg-white border border-gray-100 rounded-[22px] p-5 shadow-sm flex flex-col justify-between">
+                <div class="flex justify-between items-center">
+                    <span class="text-xs text-gray-400 font-medium">متوسط قيمة الطلب (AOV)</span>
+                    <span
+                        class="fa-solid fa-box-open text-white text-lg p-2 rounded-xl bg-emerald-50 text-brand-green"></span>
+                </div>
+                <div class="mt-3">
+                    <h3 class="text-2xl font-bold text-gray-800">$1,850</h3>
+                    <p class="text-[11px] text-emerald-600 font-bold mt-1">↑ +5.0% تحسن في طلبات الجملة</p>
+                </div>
+            </div>
+
+            <div class="bg-white border border-gray-100 rounded-[22px] p-5 shadow-sm flex flex-col justify-between">
+                <div class="flex justify-between items-center">
+                    <span class="text-xs text-gray-400 font-medium">التجار النشطون</span>
+                    <span class="fa-solid fa-users p-2 rounded-xl bg-amber-50 text-brand-yellow text-lg"></span>
+                </div>
+                <div class="mt-3">
+                    <h3 class="text-2xl font-bold text-gray-800">68 تاجر</h3>
+                    <p class="text-[11px] text-gray-400 font-medium mt-1">منهم 12 تاجر جديد هذا الشهر</p>
+                </div>
+            </div>
+
+            <div class="bg-white border border-gray-100 rounded-[22px] p-5 shadow-sm flex flex-col justify-between">
+                <div class="flex justify-between items-center">
+                    <span class="text-xs text-gray-400 font-medium">معدل تنفيذ الطلبات</span>
+                    <span class="fa-solid fa-bolt p-2 rounded-xl bg-emerald-50 text-brand-green text-lg"></span>
+                </div>
+                <div class="mt-3">
+                    <h3 class="text-2xl font-bold text-gray-800">98.5%</h3>
+                    <p class="text-[11px] text-emerald-600 font-bold mt-1">زمن المعالجة: 1.2 يوم</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- 2. قسم الرسوم البيانية (Charts) -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 px-8 mt-8">
+
+            <!-- الرسم البياني الرئيسي للمبيعات (تأخذ مساحة أكبر) -->
+            <div class="lg:col-span-2 bg-white border border-gray-150 rounded-[30px] p-6 shadow-xs">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-base font-bold text-gray-800">نمو المبيعات الإجمالية ($)</h3>
+                    <span class="text-xs text-gray-400">النصف الأول من 2026</span>
+                </div>
+                <div class="h-64">
+                    <canvas id="salesChart"></canvas>
+                </div>
+            </div>
+
+            <!-- الرسم البياني الدائري لتوزيع الأصناف -->
+            <div class="bg-white border border-gray-150 rounded-[30px] p-6 shadow-xs flex flex-col justify-between">
+                <div class="flex justify-between items-center mb-2">
+                    <h3 class="text-base font-bold text-gray-800">توزيع المبيعات حسب الفئة</h3>
+                </div>
+                <div class="h-56 relative flex items-center justify-center">
+                    <canvas id="categoryChart"></canvas>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- 3. الجداول التحليلية (أفضل التجار + الأقسام الأكثر طلباً) -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 px-8 mt-8">
+
+            <!-- جدول كبار التجار -->
+            <div class="bg-white border border-gray-150 rounded-[30px] p-6 shadow-xs">
+                <h3 class="text-base font-bold text-gray-800 mb-4">أعلى التجار شراءً هذا الشهر</h3>
+                <div class="space-y-3">
+
+                    <div class="flex justify-between items-center p-3 bg-gray-50 rounded-2xl">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-9 h-9 rounded-full bg-brand-green text-white font-bold text-xs flex items-center justify-center">
+                                1</div>
+                            <div>
+                                <h4 class="text-xs font-bold text-gray-800">سوبرماركت البركة المركزي</h4>
+                                <p class="text-[10px] text-gray-400">14 طلب مكتمل</p>
+                            </div>
+                        </div>
+                        <span class="text-xs font-bold text-brand-green">$24,100</span>
+                    </div>
+
+                    <div class="flex justify-between items-center p-3 bg-gray-50 rounded-2xl">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-9 h-9 rounded-full bg-brand-green text-white font-bold text-xs flex items-center justify-center">
+                                2</div>
+                            <div>
+                                <h4 class="text-xs font-bold text-gray-800">مؤسسة الرائد للتجزئة</h4>
+                                <p class="text-[10px] text-gray-400">9 طلبات مكتملة</p>
+                            </div>
+                        </div>
+                        <span class="text-xs font-bold text-brand-green">$18,450</span>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- جدول المنتجات الأسرع دورانًا -->
+            <div class="bg-white border border-gray-150 rounded-[30px] p-6 shadow-xs">
+                <h3 class="text-base font-bold text-gray-800 mb-4">الأصناف الأعلى حركية ودوراناً</h3>
+                <div class="space-y-3">
+
+                    <div class="flex justify-between items-center p-3 bg-gray-50 rounded-2xl">
+                        <div>
+                            <h4 class="text-lg font-bold text-gray-800">دقيق سيقا</h4>
+                            <p class="text-[13px] text-gray-400">تم بيع 1,200 شوال</p>
+                        </div>
+                        <!-- <span class="text-xs font-bold bg-amber-100 text-amber-800 px-2.5 py-1 rounded-full">مخزون
+                            ممتاز</span> -->
+                    </div>
+
+                    <div class="flex justify-between items-center p-3 bg-gray-50 rounded-2xl">
+                        <div>
+                            <h4 class="text-lg font-bold text-gray-800">لبن كابو مجفف</h4>
+                            <p class="text-[13px] text-gray-400">تم بيع 850 كرتونة</p>
+                        </div>
+                        <!-- <span class="text-xs font-bold bg-rose-100 text-rose-700 px-2.5 py-1 rounded-full">يحتاج إعادة
+                            توريد</span> -->
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- إعداد الرسوم البيانية -->
+    <script>
+        // الألوان الخاصة بنا
+        const colorGreen = '#007e5e';
+        const colorYellow = '#f8c827';
+
+        // 1. رسم بياني للمبيعات (Line Chart)
+        const ctxSales = document.getElementById('salesChart').getContext('2d');
+        new Chart(ctxSales, {
+            type: 'line',
+            data: {
+                labels: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو'],
+                datasets: [{
+                    label: 'المبيعات ($)',
+                    data: [65000, 78000, 90000, 81000, 105000, 124500],
+                    borderColor: colorGreen,
+                    backgroundColor: 'rgba(0, 126, 94, 0.08)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { grid: { borderDash: [4, 4] } },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+
+        // 2. رسم بياني للفئات (Doughnut Chart)
+        const ctxCategory = document.getElementById('categoryChart').getContext('2d');
+        new Chart(ctxCategory, {
+            type: 'doughnut',
+            data: {
+                labels: ['الدقيق', 'المعلبات والالبان', 'الحبوب والنشويات', 'السكريات'],
+                datasets: [{
+                    data: [45, 25, 20, 10],
+                    backgroundColor: [colorGreen, colorYellow, '#84b0b2', '#e2e8f0'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom', labels: { boxWidth: 12, font: { family: 'Cairo' } } }
+                },
+                cutout: '70%'
+            }
+        });
+    </script>
+</body>
+
+</html>
