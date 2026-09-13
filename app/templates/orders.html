@@ -40,10 +40,10 @@
                 </div>
                 <!-- الروابط -->
                 <div class="flex items-center gap-6">
-                    <a href="factoryProfile.html" class="hover:text-black transition">الملف الشخصي</a>
-                    <a href="orders.html" class="text-black font-semibold border-b-2 border-[#f3b338] pb-1">الطلبات</a>
-                    <a href="productManagement.html" class="hover:text-black transition">ادارة المنتجات</a>
-                    <a href="report.html" class="hover:text-black transition">التقارير</a>
+                    <a href="{{ url_for('factory_profile') }}" class="hover:text-black transition">الملف الشخصي</a>
+                    <a href="{{ url_for('factory_orders') }}" class="text-black font-semibold border-b-2 border-[#f3b338] pb-1">الطلبات</a>
+                    <a href="{{ url_for('factory_products') }}" class="hover:text-black transition">ادارة المنتجات</a>
+                    <a href="{{ url_for('factory_reports') }}" class="hover:text-black transition">التقارير</a>
                     <!-- <a href="#" class="hover:text-black transition">Settings</a> -->
                 </div>
                 <!-- مساحة فارغة للتوازن -->

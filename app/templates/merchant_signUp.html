@@ -6,19 +6,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>إنشاء حساب تاجر | FOODX</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/merchant_style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/merchant_style.css') }}">
 </head>
 
 <body>
 
     <div class="signup-container">
         <div class="logo-container">
-            <img src="imges/logo.jpg" alt="logo">
+            <img src="{{ url_for('static', filename='imges/logo.jpg') }}" alt="logo">
             <h2>انشاء حساب تاجر</h2>
             <p>انضم إلينا كتاجر للمواد الغذائية في منصة Food X</p>
         </div>
 
-        <form action="#" method="POST" enctype="multipart/form-data">
+        <form action="{{ url_for('merchant_signup') }}" method="POST" enctype="multipart/form-data">
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                  <div style="background: {% if category == 'danger' %}#f8d7da{% else %}#d4edda{% endif %}; color: {% if category == 'danger' %}#721c24{% else %}#155724{% endif %}; padding: 10px; border-radius: 8px; margin-bottom: 15px; font-size: 14px; text-align: center;">
+                    {{ message }}
+                  </div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
 
             <div class="form-section">
                 <h3 class="section-title">البيانات الأساسية</h3>
@@ -26,7 +36,8 @@
                 <div class="grid-2">
                     <div class="form-group">
                         <label>اسم المستخدم<span class="required">*</span></label>
-                        <input type="text" name="username" placeholder="مثال: ahmed_store" required>
+                        <input type="text" name="username" placeholder="مثال: ahmed_store" value="{{ form.username.data or '' }}" required>
+                        {% if form.username.errors %}<span style="color:#e74c3c; font-size:12px; display:block; margin-top:4px;">{{ form.username.errors[0] }}</span>{% endif %}
                         <span class="hint">يُستخدم لتسجيل الدخول لاحقاً</span>
                     </div>
 
@@ -40,32 +51,29 @@
                                 اظهار
                             </button>
                         </div>
+                        {% if form.password.errors %}<span style="color:#e74c3c; font-size:12px; display:block; margin-top:4px;">{{ form.password.errors[0] }}</span>{% endif %}
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label>البريد الإلكتروني<span class="required">*</span></label>
-                    <input type="email" name="email" placeholder="example@domain.com" required>
+                    <input type="email" name="email" placeholder="example@domain.com" value="{{ form.email.data or '' }}" required>
                     <span class="hint">سنقوم بإرسال رمز التحقق (OTP) إلى هذا البريد</span>
+                    {% if form.email.errors %}<span style="color:#e74c3c; font-size:12px; display:block; margin-top:4px;">{{ form.email.errors[0] }}</span>{% endif %}
                 </div>
 
-                <div class="grid-2">
-                    <div class="form-group">
-                        <label>اسم المحل التجاري<span class="required">*</span></label>
-                        <input type="text" name="store_name" placeholder="الاسم الذي سيظهر للعملاء" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label>رقم الهاتف<span class="required">*</span></label>
-                        <input type="tel" name="phone" placeholder="01XXXXXXXX" required>
-                    </div>
+                <div class="form-group">
+                    <label>رقم الهاتف<span class="required">*</span></label>
+                    <input type="tel" name="phone" placeholder="01XXXXXXXX" value="{{ form.phone.data or '' }}" required>
+                    {% if form.phone.errors %}<span style="color:#e74c3c; font-size:12px; display:block; margin-top:4px;">{{ form.phone.errors[0] }}</span>{% endif %}
                 </div>
 
 
                 <div class="form-group" id="otherCityGroup">
                     <label>الموقع بالتفصيل<span class="required">*</span></label>
                     <input type="text" id="otherCityInput" name="other_location" placeholder="مثال: امدرمان، سوق صابرين"
-                        required>
+                        value="{{ form.other_location.data or '' }}" required>
+                    {% if form.other_location.errors %}<span style="color:#e74c3c; font-size:12px; display:block; margin-top:4px;">{{ form.other_location.errors[0] }}</span>{% endif %}
                 </div>
             </div>
 
@@ -75,23 +83,17 @@
 
                 <div class="form-group">
                     <label>الرقم الوطني<span class="required">*</span></label>
-                    <input type="text" name="national_id" placeholder="أدخل الرقم الوطني المكون من 11 رقم" pattern="\d+"
+                    <input type="text" name="national_id" placeholder="أدخل الرقم الوطني (11 رقم على الأقل)" value="{{ form.national_id.data or '' }}"
                         required>
+                    {% if form.national_id.errors %}<span style="color:#e74c3c; font-size:12px; display:block; margin-top:4px;">{{ form.national_id.errors[0] }}</span>{% endif %}
                 </div>
-
-                <div class="form-group">
-                    <label>رخصة المحل / الرخصة التجارية (اختياري)</label>
-                    <input type="file" name="trade_license" accept="image/*, .pdf">
-                    <span class="hint">يدعم صيغ الصور و PDF لتسهيل انضمام صغار التجار</span>
-                </div>
-            </div>
 
             <button type="submit" class="submit-btn">إنشاء الحساب</button>
         </form>
     </div>
 
 
-    <script src="merchant.js"></script>
+    <script src="{{ url_for('static', filename='merchant.js') }}"></script>
 
 </body>
 

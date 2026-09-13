@@ -1,9 +1,11 @@
 import os
-
 from dotenv import load_dotenv
+from flask_sqlalchemy import SQLAlchemy
 
 load_dotenv()
 
+# إنشاء كائن قاعدة البيانات هنا في ملف config
+db = SQLAlchemy()
 
 class Config:
     DB_HOST = os.getenv("DB_HOST", "localhost")
@@ -16,18 +18,18 @@ class Config:
     if use_postgres:
         SQLALCHEMY_DATABASE_URI = os.getenv(
             "DATABASE_URL",
-            f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}",
+            f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
         )
     else:
         SQLALCHEMY_DATABASE_URI = os.getenv(
             "SQLALCHEMY_DATABASE_URI",
-            "sqlite:///foodx.db",
+            "sqlite:///foodx.db"
         )
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SECRET_KEY = os.getenv("SECRET_KEY", "change-me-in-production")
-
-    # Comma-separated frontend origins allowed to call /api/* (Option B: static server on 8080)
+    WTF_CSRF_ENABLED = False
+    
     CORS_ORIGINS = [
         origin.strip()
         for origin in os.getenv("CORS_ORIGINS", "http://localhost:8080").split(",")

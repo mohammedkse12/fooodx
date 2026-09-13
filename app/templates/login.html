@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>تسجيل الدخول | منصة الغذاء التجارية</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/login_style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login_style.css') }}">
     <style>
 
     </style>
@@ -16,16 +16,27 @@
 
     <div class="login-container">
         <div class="logo-container">
-            <img src="imges/logo.jpg" alt="logo">
+            <img src="{{ url_for('static', filename='imges/logo.jpg') }}" alt="logo">
             <h2>FOOFX</h2>
             <p>مرحباً بك مجدداً، الرجاء تسجيل الدخول إلى حسابك</p>
         </div>
 
-        <form action="#" method="POST">
+        <form action="{{ url_for('login') }}" method="POST">
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                  <div style="background: {% if category == 'danger' %}#f8d7da{% else %}#d4edda{% endif %}; color: {% if category == 'danger' %}#721c24{% else %}#155724{% endif %}; padding: 10px; border-radius: 8px; margin-bottom: 15px; font-size: 14px; text-align: center;">
+                    {{ message }}
+                  </div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
 
             <div class="form-group">
                 <label for="userId">اسم المستخدم أو المعرّف (ID)<span style="color: #e74c3c;">*</span></label>
                 <input type="text" id="userId" name="user_id" placeholder="أدخل اسم المستخدم" required>
+                {% if form.user_id.errors %}<span style="color:#e74c3c; font-size:12px; display:block; margin-top:4px;">{{ form.user_id.errors[0] }}</span>{% endif %}
             </div>
 
             <div class="form-group">
@@ -38,6 +49,7 @@
                         اظهار
                     </button>
                 </div>
+                {% if form.password.errors %}<span style="color:#e74c3c; font-size:12px; display:block; margin-top:4px;">{{ form.password.errors[0] }}</span>{% endif %}
             </div>
 
             <!-- <div class="form-options">
@@ -53,14 +65,14 @@
             <p class="pp">ليس لديك حساب مسجل في المنصة؟</p>
 
             <div class="signup-divider">
-                <a href="factory_signUp.html" target="_blank" class="redirect-btn" id="signupRedirect">إنشاء حساب
+                <a href="{{ url_for('factory_signup') }}" class="redirect-btn" id="signupRedirect">إنشاء حساب
                     مورد</a>
-                <a href="merchant_signUp.html" target="_blank" class="redirect-btn">إنشاء حساب تاجر</a>
+                <a href="{{ url_for('merchant_signup') }}" class="redirect-btn">إنشاء حساب تاجر</a>
             </div>
         </form>
     </div>
 
-    <script src="login.js"></script>
+    <script src="{{ url_for('static', filename='login.js') }}"></script>
 </body>
 
 </html>

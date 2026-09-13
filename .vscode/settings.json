@@ -21,5 +21,6 @@
             "database": "foodx_db",
             "username": "mohammed"
         }
-    ]
+    ],
+    "python-envs.defaultEnvManager": "ms-python.python:system"
 }

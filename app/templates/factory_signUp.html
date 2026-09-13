@@ -6,19 +6,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>إنشاء حساب مورد | FOODX</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/factory_style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/factory_style.css') }}">
 </head>
 
 <body>
 
     <div class="signup-container">
         <div class="logo-container">
-            <img src="imges/logo.jpg" alt="logo">
+            <img src="{{ url_for('static', filename='imges/logo.jpg') }}" alt="logo">
             <h2>انشاء حساب مورد</h2>
             <p>انضم إلينا كمزود رئيسي للمواد الغذائية في منصة Food X</p>
         </div>
 
-        <form action="#" method="POST">
+        <form action="{{ url_for('factory_signup') }}" method="POST">
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                  <div style="background: {% if category == 'danger' %}#f8d7da{% else %}#d4edda{% endif %}; color: {% if category == 'danger' %}#721c24{% else %}#155724{% endif %}; padding: 10px; border-radius: 8px; margin-bottom: 15px; font-size: 14px; text-align: center;">
+                    {{ message }}
+                  </div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
 
             <input type="hidden" name="account_status" value="pending_review">
 
@@ -28,18 +38,18 @@
                     <div class="form-group">
                         <label>اسم المستخدم<span class="required">*</span></label>
                         <input type="text" name="username" placeholder="مثال: factory_123" required>
+                        {% if form.username.errors %}<span style="color:#e74c3c; font-size:12px; display:block; margin-top:4px;">{{ form.username.errors[0] }}</span>{% endif %}
                     </div>
 
                     <div class="form-group">
                         <label>كلمة المرور<span class="required">*</span></label>
                         <div class="password-wrapper">
-                            <input type="password" id="passwordField" name="password" placeholder="أدخل كلمة مرور قوية"
-                                required>
-                            <button type="button" id="togglePassword"
-                                style="position: absolute; left: 10px; top: 12px; background: rgb(238, 240, 238);padding: 5px; border: 1px solid #007e5e;border-radius: 10px; cursor: pointer; font-size: 12px;">
+                            <input type="password" id="passwordField" name="password" placeholder="أدخل كلمة مرور قوية" required>
+                            <button type="button" id="togglePassword" style="position: absolute; left: 10px; top: 12px; background: rgb(238, 240, 238);padding: 5px; border: 1px solid #007e5e;border-radius: 10px; cursor: pointer; font-size: 12px;">
                                 اظهار
                             </button>
                         </div>
+                        {% if form.password.errors %}<span style="color:#e74c3c; font-size:12px; display:block; margin-top:4px;">{{ form.password.errors[0] }}</span>{% endif %}
                     </div>
                 </div>
             </div>
@@ -49,8 +59,8 @@
 
                 <div class="form-group">
                     <label>اسم المصنع<span class="required">*</span></label>
-                    <input type="text" name="factory_name" placeholder="الاسم التجاري الذي سيظهر للتجار على المنصة"
-                        required>
+                    <input type="text" name="factory_name" placeholder="الاسم التجاري الذي سيظهر للتجار على المنصة" required>
+                    {% if form.factory_name.errors %}<span style="color:#e74c3c; font-size:12px; display:block; margin-top:4px;">{{ form.factory_name.errors[0] }}</span>{% endif %}
                 </div>
 
                 <div class="grid-2">
@@ -58,11 +68,13 @@
                         <label>البريد الإلكتروني<span class="required">*</span></label>
                         <input type="email" name="email" placeholder="example@factory.com" required>
                         <span class="hint">أساسي لاستلام رمز التحقق (OTP)</span>
+                        {% if form.email.errors %}<span style="color:#e74c3c; font-size:12px; display:block; margin-top:4px;">{{ form.email.errors[0] }}</span>{% endif %}
                     </div>
 
                     <div class="form-group">
                         <label>رقم الهاتف<span class="required">*</span></label>
                         <input type="tel" name="phone" placeholder="0XXXXXXXX" required>
+                        {% if form.phone.errors %}<span style="color:#e74c3c; font-size:12px; display:block; margin-top:4px;">{{ form.phone.errors[0] }}</span>{% endif %}
                     </div>
                 </div>
             </div>
@@ -70,6 +82,7 @@
             <div class="form-group" id="city">
                 <label>الموقع بالتفصيل<span class="required">*</span></label>
                 <input type="text" id="cityInput" name="location" placeholder="مثال: بحري، المنطقة الصناعية" required>
+                {% if form.location.errors %}<span style="color:#e74c3c; font-size:12px; display:block; margin-top:4px;">{{ form.location.errors[0] }}</span>{% endif %}
             </div>
 
             <div class="form-group">
@@ -88,6 +101,7 @@
                         <span class="radio-text">لا</span>
                     </label>
                 </div>
+                {% if form.shipping_available.errors %}<span style="color:#e74c3c; font-size:12px; display:block; margin-top:4px;">{{ form.shipping_available.errors[0] }}</span>{% endif %}
             </div>
 
 
@@ -97,6 +111,7 @@
                 <div class="form-group">
                     <label>رقم السجل التجاري<span class="required">*</span></label>
                     <input type="text" name="commercial_register" placeholder="أدخل رقم السجل (مثال: 12345)" required>
+                    {% if form.commercial_register.errors %}<span style="color:#e74c3c; font-size:12px; display:block; margin-top:4px;">{{ form.commercial_register.errors[0] }}</span>{% endif %}
                     <span class="hint">سيتم مراجعته وتفعيل الحساب لاحقاً من قِبل الإدارة.</span>
                 </div>
             </div>
@@ -105,7 +120,7 @@
         </form>
     </div>
 
-    <script src="factory.js"></script>
+    <script src="{{ url_for('static', filename='factory.js') }}"></script>
 </body>
 
 </html>
