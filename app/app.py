@@ -5,8 +5,10 @@ from .forms import factorySignup, merchantSignupForm, LoginForm
 from flask_cors import CORS
 import os
 import time
+import secrets
 from dotenv import load_dotenv
 from .config import db, Config
+from .mailer import send_otp_email
 
 # Load environment variables
 load_dotenv()
@@ -138,11 +140,23 @@ def login():
 
         if result and check_password_hash(result[3], password):
             _reset_failed_attempts(ip)
-            session['user_id'] = result[0]
-            session['username'] = result[1]
-            session['role'] = result[4]
-            flash('تم تسجيل الدخول بنجاح', 'success')
-            return redirect(url_for('factory_profile'))
+            # Password correct -> require email OTP (2FA) before opening a session
+            otp_code = str(secrets.randbelow(900000) + 100000)
+            session['pending_login'] = {
+                'user_id': result[0],
+                'username': result[1],
+                'email': result[2],
+                'role': result[4],
+                'otp_code': otp_code,
+                'attempts': 0,
+                'expires_at': time.time() + 600
+            }
+            sent = send_otp_email(result[2], otp_code)
+            if not sent:
+                flash('لم يتم تجهيز إعدادات إرسال البريد بعد. رمز التحقق للتجربة هو: ' + otp_code, 'info')
+            else:
+                flash('تم إرسال رمز التحقق (OTP) إلى بريدك الإلكتروني لتأكيد تسجيل الدخول.', 'info')
+            return redirect(url_for('verify_otp'))
         else:
             _record_failed_attempt(ip)
             remaining = MAX_FAILED_ATTEMPTS - FAILED_LOGIN_ATTEMPTS.get(ip, {}).get("count", 0)
@@ -206,37 +220,43 @@ def factory_signup():
             shipping_available = request.form.get('shipping_available') or request.form.get('has_shipping')
             commercial_register = request.form.get('commercial_register')
 
+            # Check for existing username/email
+            existing = db.session.execute(
+                text("SELECT id FROM users WHERE username = :u OR email = :e"),
+                {'u': username, 'e': email}
+            ).fetchone()
+            if existing:
+                flash('يوجد حساب مسجل مسبقاً بنفس اسم المستخدم أو البريد الإلكتروني. إذا كان لك حساب بالفعل فبإمكانك تسجيل الدخول مباشرة.', 'danger')
+                return render_template('factory_signup.html', form=form)
+
             hashed_password = generate_password_hash(password)
 
-            sql_user = text("""
-                INSERT INTO users (username, email, password, role, phone)
-                VALUES (:username, :email, :password, 'Manufacturer', :phone)
-                RETURNING id;
-            """)
-            result = db.session.execute(sql_user, {
-                'username': username,
+            # Generate OTP and store pending registration
+            otp_code = str(secrets.randbelow(900000) + 100000)
+            session['pending_signup'] = {
+                'role': 'Manufacturer',
+                'form_data': {
+                    'username': username,
+                    'email': email,
+                    'phone': phone,
+                    'factory_name': factory_name,
+                    'location': location,
+                    'shipping_available': shipping_available,
+                    'commercial_register': commercial_register
+                },
+                'hashed_password': hashed_password,
                 'email': email,
-                'password': hashed_password,
-                'phone': phone
-            })
-            user_id = result.fetchone()[0]
+                'otp_code': otp_code,
+                'attempts': 0,
+                'expires_at': time.time() + 600  # 10 minutes
+            }
 
-            sql_manufacturer = text("""
-                INSERT INTO manufacturers (user_id, commercial_register, address, have_cars, factory_name)
-                VALUES (:user_id, :commercial_register, :address, :have_cars, :factory_name);
-            """)
-            db.session.execute(sql_manufacturer, {
-                'user_id': user_id,
-                'commercial_register': commercial_register,
-                'address': location,
-                'have_cars': True if shipping_available == 'yes' else False,
-                'factory_name': factory_name
-            })
-
-            db.session.commit()
-
-            flash('تم إرسال طلب التسجيل بنجاح، سيتم مراجعته قريباً!', 'success')
-            return redirect(url_for('login'))
+            sent = send_otp_email(email, otp_code)
+            if not sent:
+                flash('لم يتم تجهيز إعدادات إرسال البريد بعد. رمز التحقق للتجربة هو: ' + otp_code, 'info')
+            else:
+                flash('تم إرسال رمز التحقق (OTP) إلى بريدك الإلكتروني. يرجى التحقق من صندوق الوارد.', 'info')
+            return redirect(url_for('verify_otp'))
 
         except Exception as e:
             db.session.rollback()
@@ -284,34 +304,30 @@ def merchant_signup():
 
             hashed_password = generate_password_hash(password)
 
-            sql_user = text("""
-                INSERT INTO users (username, email, password, role, phone)
-                VALUES (:username, :email, :password, 'retailer', :phone)
-                RETURNING id;
-            """)
-            result = db.session.execute(sql_user, {
-                'username': username,
+            # Generate OTP and store pending registration
+            otp_code = str(secrets.randbelow(900000) + 100000)
+            session['pending_signup'] = {
+                'role': 'retailer',
+                'form_data': {
+                    'username': username,
+                    'email': email,
+                    'phone': phone,
+                    'detailed_location': detailed_location,
+                    'national_id': national_id
+                },
+                'hashed_password': hashed_password,
                 'email': email,
-                'password': hashed_password,
-                'phone': phone
-            })
-            user_id = result.fetchone()[0]
+                'otp_code': otp_code,
+                'attempts': 0,
+                'expires_at': time.time() + 600  # 10 minutes
+            }
 
-            sql_merchant = text("""
-                INSERT INTO retailers (user_id, commercial_register, shipping_address, nationa_num)
-                VALUES (:user_id, :commercial_register, :shipping_address, :nationa_num);
-            """)
-            db.session.execute(sql_merchant, {
-                'user_id': user_id,
-                'commercial_register': None,
-                'shipping_address': detailed_location,
-                'nationa_num': nationa_num
-            })
-
-            db.session.commit()
-
-            flash('تم إنشاء حساب التاجر بنجاح!', 'success')
-            return redirect(url_for('login'))
+            sent = send_otp_email(email, otp_code)
+            if not sent:
+                flash('لم يتم تجهيز إعدادات إرسال البريد بعد. رمز التحقق للتجربة هو: ' + otp_code, 'info')
+            else:
+                flash('تم إرسال رمز التحقق (OTP) إلى بريدك الإلكتروني. يرجى التحقق من صندوق الوارد.', 'info')
+            return redirect(url_for('verify_otp'))
 
         except Exception as e:
             db.session.rollback()
@@ -323,6 +339,154 @@ def merchant_signup():
         else:
             flash('يرجى التحقق من البيانات وإعادة المحاولة.', 'danger')
     return render_template('merchant_signUp.html', form=form)
+
+
+def _get_pending_flow():
+    """Pick the active OTP flow (signup|login). If both exist, the most recent wins."""
+    pending_signup = session.get('pending_signup')
+    pending_login = session.get('pending_login')
+    if pending_signup and pending_login:
+        if pending_signup.get('expires_at', 0) >= pending_login.get('expires_at', 0):
+            return pending_signup, 'signup'
+        return pending_login, 'login'
+    if pending_signup:
+        return pending_signup, 'signup'
+    if pending_login:
+        return pending_login, 'login'
+    return None, None
+
+
+@app.route('/verify-otp', methods=['GET', 'POST'])
+def verify_otp():
+    pending, mode = _get_pending_flow()
+    if not pending:
+        flash('لا يوجد طلب تحقق معلق. يرجى البدء من جديد.', 'danger')
+        return redirect(url_for('login'))
+
+    # state: ok / expired / blocked (5 failed attempts)
+    if time.time() > pending.get('expires_at', 0):
+        state = 'expired'
+    elif pending.get('attempts', 0) >= 5:
+        state = 'blocked'
+    else:
+        state = 'ok'
+
+    masked_email = None
+    if pending.get('email'):
+        parts = pending['email'].split('@')
+        masked_email = parts[0][:1] + '***@' + parts[1]
+
+    if request.method == 'POST':
+        submitted_otp = request.form.get('otp', '').strip()
+
+        if state != 'ok':
+            flash('انتهت صلاحية رمز التحقق أو تم تجاوز عدد المحاولات. يرجى طلب رمز جديد من الأسفل.', 'danger')
+        elif submitted_otp == pending.get('otp_code'):
+            if mode == 'login':
+                session['user_id'] = pending['user_id']
+                session['username'] = pending['username']
+                session['role'] = pending['role']
+                session.pop('pending_login', None)
+                flash('تم تسجيل الدخول بنجاح', 'success')
+                return redirect(url_for('factory_profile'))
+
+            # mode == 'signup': create the account now that OTP is confirmed
+            try:
+                role = pending['role']
+                form_data = pending['form_data']
+                hashed_password = pending['hashed_password']
+                email = pending['email']
+
+                sql_user = text("""
+                    INSERT INTO users (username, email, password, role, phone)
+                    VALUES (:username, :email, :password, :role, :phone)
+                    RETURNING id;
+                """)
+                result = db.session.execute(sql_user, {
+                    'username': form_data['username'],
+                    'email': email,
+                    'password': hashed_password,
+                    'role': role,
+                    'phone': form_data['phone']
+                })
+                user_id = result.fetchone()[0]
+
+                if role == 'Manufacturer':
+                    sql_manufacturer = text("""
+                        INSERT INTO manufacturers (user_id, commercial_register, address, have_cars, factory_name)
+                        VALUES (:user_id, :commercial_register, :address, :have_cars, :factory_name);
+                    """)
+                    db.session.execute(sql_manufacturer, {
+                        'user_id': user_id,
+                        'commercial_register': form_data['commercial_register'],
+                        'address': form_data['location'],
+                        'have_cars': True if form_data['shipping_available'] == 'yes' else False,
+                        'factory_name': form_data['factory_name']
+                    })
+                else:  # retailer
+                    nationa_num = int(str(form_data['national_id'])[-9:]) if form_data.get('national_id') else None
+                    sql_merchant = text("""
+                        INSERT INTO retailers (user_id, commercial_register, shipping_address, nationa_num)
+                        VALUES (:user_id, :commercial_register, :shipping_address, :nationa_num);
+                    """)
+                    db.session.execute(sql_merchant, {
+                        'user_id': user_id,
+                        'commercial_register': None,
+                        'shipping_address': form_data['detailed_location'],
+                        'nationa_num': nationa_num
+                    })
+
+                db.session.commit()
+                session.pop('pending_signup', None)
+                flash('تم تأكيد البريد الإلكتروني وإنشاء الحساب بنجاح! يمكنك الآن تسجيل الدخول.', 'success')
+                return redirect(url_for('login'))
+            except Exception as e:
+                db.session.rollback()
+                msg = str(e).lower()
+                if 'duplicate key' in msg or 'unique' in msg:
+                    session.pop('pending_signup', None)
+                    flash('استُخدم اسم المستخدم أو البريد الإلكتروني أو الرقم الوطني أثناء تأكيد الحساب. يرجى بدء التسجيل من جديد.', 'danger')
+                    return redirect(url_for('login'))
+                flash(f'حدث خطأ أثناء تأكيد الحساب: {str(e)}', 'danger')
+        else:
+            # wrong OTP -> count the attempt
+            pending['attempts'] = pending.get('attempts', 0) + 1
+            if mode == 'signup':
+                session['pending_signup'] = pending
+            else:
+                session['pending_login'] = pending
+            if pending['attempts'] >= 5:
+                state = 'blocked'
+                flash('تم بلوغ الحد الأقصى للمحاولات (5). يرجى طلب رمز جديد للمتابعة.', 'danger')
+            else:
+                flash(f'رمز التحقق غير صحيح. المحاولات المتبقية: {5 - pending["attempts"]}', 'danger')
+
+    return render_template('verify_otp.html', masked_email=masked_email, mode=mode, state=state)
+
+
+@app.route('/resend-otp', methods=['GET', 'POST'])
+def resend_otp():
+    pending, mode = _get_pending_flow()
+    if not pending:
+        flash('لا يوجد طلب تحقق معلق.', 'danger')
+        return redirect(url_for('login'))
+
+    # Generate a fresh OTP and reset the attempt counter
+    new_otp = str(secrets.randbelow(900000) + 100000)
+    pending['otp_code'] = new_otp
+    pending['attempts'] = 0
+    pending['expires_at'] = time.time() + 600
+    if mode == 'signup':
+        session['pending_signup'] = pending
+    else:
+        session['pending_login'] = pending
+
+    sent = send_otp_email(pending['email'], new_otp)
+    if not sent:
+        flash('لم يتم تجهيز إعدادات إرسال البريد بعد. رمز التحقق للتجربة هو: ' + new_otp, 'info')
+    else:
+        flash('تم إرسال رمز تحقق جديد إلى بريدك الإلكتروني.', 'info')
+    return redirect(url_for('verify_otp'))
 
 
 @app.route('/factory/profile', methods=['GET'])

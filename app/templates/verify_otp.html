@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تأكيد رمز التحقق | FOODX</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login_style.css') }}">
+    <style>
+        .otp-input {
+            letter-spacing: 8px;
+            font-size: 22px;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .masked-email {
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 14px;
+            margin-top: 6px;
+        }
+
+        .otp-notice {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .resend-box {
+            text-align: center;
+            font-size: 14px;
+            color: #7f8c8d;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+        }
+
+        .resend-box a {
+            color: var(--primary-color);
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .resend-box a:hover {
+            text-decoration: underline;
+        }
+
+        .cancel-link {
+            display: block;
+            margin-top: 8px;
+            font-size: 13px;
+            color: #7f8c8d;
+            text-decoration: none;
+        }
+
+        .cancel-link:hover {
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-container">
+        <div class="logo-container">
+            <img src="{{ url_for('static', filename='imges/logo.jpg') }}" alt="logo">
+            {% if mode == 'login' %}
+            <h2>تأكيد تسجيل الدخول</h2>
+            <p>أدخل رمز التحقق المرسل إلى بريدك الإلكتروني لتأكيد تسجيل الدخول</p>
+            {% else %}
+            <h2>تأكيد البريد الإلكتروني</h2>
+            <p>أدخل رمز التحقق المرسل إلى بريدك الإلكتروني لإكمال التسجيل</p>
+            {% endif %}
+            {% if masked_email %}
+            <p class="masked-email">{{ masked_email }}</p>
+            {% endif %}
+        </div>
+
+        <form action="{{ url_for('verify_otp') }}" method="POST">
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                  <div style="background: {% if category == 'danger' %}#f8d7da{% else %}#d4edda{% endif %}; color: {% if category == 'danger' %}#721c24{% else %}#155724{% endif %}; padding: 10px; border-radius: 8px; margin-bottom: 15px; font-size: 14px; text-align: center;">
+                    {{ message }}
+                  </div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+
+            {% if state == 'expired' %}
+            <div class="otp-notice">انتهت صلاحية رمز التحقق. يرجى طلب رمز جديد من الأسفل.</div>
+            {% elif state == 'blocked' %}
+            <div class="otp-notice">تم بلوغ الحد الأقصى للمحاولات (5). يرجى طلب رمز جديد للمتابعة.</div>
+            {% endif %}
+
+            <div class="form-group">
+                <label for="otp">رمز التحقق (6 أرقام)<span style="color: #e74c3c;">*</span></label>
+                <input type="text" id="otp" name="otp" class="otp-input" placeholder="------" maxlength="6" pattern="\d{6}" inputmode="numeric" autocomplete="one-time-code" required autofocus>
+            </div>
+
+            <button type="submit" class="submit-btn">تأكيد</button>
+        </form>
+
+        <div class="resend-box">
+            <p>لم تستلم الرمز؟ <a href="{{ url_for('resend_otp') }}">إعادة إرسال الرمز</a></p>
+            <a class="cancel-link" href="{{ url_for('login') }}">إلغاء والعودة إلى صفحة تسجيل الدخول</a>
+        </div>
+    </div>
+
+</body>
+
+</html>
